@@ -50,13 +50,17 @@ class ModelInfo:
     def __init__(self, model_handler, model_id=None):
         self.model_handler = model_handler
         # if no model id is provided, generate it
-        # otherwise load the modelinfo from the model_handler
+        # otherwise use the given id
+        # if the id already exists, the model is taken from the model_handler
         if model_id is None:
             self._generate_unique_id()
             self.info = pd.DataFrame({"id": [self.id]})
         else:
             self.id = model_id
-            self.info = self.model_handler.modelsinfo[self.model_handler.modelsinfo["id"] == model_id]
+            if (self.model_handler.modelsinfo["id"] == model_id).any():
+                self.info = self.model_handler.modelsinfo[self.model_handler.modelsinfo["id"] == model_id]
+            else:
+                self.info = pd.DataFrame({"id": [self.id]})
           
     def _generate_unique_id(self):
         # generate a unique id for the model based on date and time
