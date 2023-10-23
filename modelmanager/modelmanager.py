@@ -38,7 +38,10 @@ class ModelHandler:
         # Add a model to the dataframe if new
         # if the model already exists, update it with current info
         if (self.modelsinfo["id"] == new_modelinfo["id"][0]).any():
-            self.modelsinfo[self.modelsinfo["id"] == new_modelinfo["id"][0]] = new_modelinfo
+            for key in new_modelinfo.keys():
+                if key not in self.modelsinfo.columns:
+                    self.modelsinfo[key] = pd.NA
+            self.modelsinfo.loc[self.modelsinfo["id"] == new_modelinfo["id"][0]] = new_modelinfo
         else:
             self.modelsinfo = pd.concat([self.modelsinfo, new_modelinfo])
         self.modelsinfo.reset_index(drop=True)
