@@ -1,0 +1,5 @@
+.ipynb_checkpoints/
+build/
+modelhandler.egg-info/
+modelhandler/.ipynb_checkpoints/
+modelhandler/__pycache__/
