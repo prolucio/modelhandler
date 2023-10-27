@@ -4,17 +4,17 @@ import os
 import shutil
 import warnings
 
-class ModelHandler:
+class ModelManager:
     def __init__(self, handler_name="models"):
         self.handler_name = handler_name
         # Retrieve info of the models if they exist
         #  otherwise, initialize the dataset
         self.modelsinfo = None
-        self.retrieve_modelsinfo()
+        self._retrieve_modelsinfo()
         # Create the folder containing the models
         os.makedirs(handler_name, exist_ok=True)
 
-    def retrieve_modelsinfo(self):
+    def _retrieve_modelsinfo(self):
         # Retrieve the csv containing model info,
         #  if it does not exist, create a new dataframe
         if os.path.isfile(os.path.join(self.handler_name, "modelsinfo.csv")):
@@ -22,7 +22,7 @@ class ModelHandler:
         else:
             self.modelsinfo = pd.DataFrame({"id":[]})
 
-    def store_modelsinfo(self):
+    def _store_modelsinfo(self):
         # Check if inforefresh.py script is already been copied to the models folder
         #  if not, create a copy
         if not os.path.isfile(os.path.join(self.handler_name, "inforefresh.py")):
@@ -35,6 +35,8 @@ class ModelHandler:
         self.modelsinfo.to_csv(os.path.join(self.handler_name, "modelsinfo.csv"), index=False)
         
     def add_model(self, new_modelinfo):
+        # Refresh dataframe before storing it
+        self._retrieve_modelsinfo()
         # Add a model to the dataframe if new
         # if the model already exists, update it with current info
         if (self.modelsinfo["id"] == new_modelinfo["id"][0]).any():
@@ -46,7 +48,7 @@ class ModelHandler:
             self.modelsinfo = pd.concat([self.modelsinfo, new_modelinfo])
         self.modelsinfo.reset_index(drop=True)
         # Store the dataframe on disk
-        self.store_modelsinfo()   
+        self._store_modelsinfo()   
         
     
 class ModelInfo:

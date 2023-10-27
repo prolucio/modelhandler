@@ -1,1 +1,1 @@
-from .modelmanager import ModelHandler, ModelInfo
+from .modelmanager import ModelManager, ModelInfo
