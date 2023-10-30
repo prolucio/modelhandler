@@ -80,7 +80,7 @@ class ModelInfo:
                 count += 1
         self.id = new_id 
         
-    def get_path(self, file_name="model", file_extension=None):
+    def get_path(self, file_name="", file_extension=None):
         # get the path containing the model
         # it is possible to add a file_name and file_extension to
         # generate the path of a file contained in the model path
